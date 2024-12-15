@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+      - name: database
+        image: mongo:latest  
+        ports:
+        - containerPort: 27017  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+spec:
+  type: ClusterIP  # Internal access only
+  selector:
+    app: database
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
